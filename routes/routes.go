@@ -18,6 +18,8 @@ func Setup(app *fiber.App) {
 
 
 	app.Get("/api/v1/users", controllers.AllUsers)
+	app.Post("/api/v1/users", controllers.CreateUser)
+
 
 
 }

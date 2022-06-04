@@ -5,6 +5,7 @@ import(
 	"go-admin/database"
 	"github.com/gofiber/fiber/v2"
 
+
 )
 
 func AllUsers(c *fiber.Ctx) error {
@@ -17,3 +18,19 @@ func AllUsers(c *fiber.Ctx) error {
 
 }
 
+func CreateUser(c *fiber.Ctx) error {
+	 var user models.User
+
+	 if err := c.BodyParser(&user); err != nil {
+		 return err
+	 }
+
+
+	 
+	user.SetPassword("1234")
+
+	db.DB.Create(&user)
+
+	return c.JSON(user)
+
+}
