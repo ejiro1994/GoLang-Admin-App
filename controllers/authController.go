@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"time"
 	"go-admin/database"
+
 	// "github.com/dgrijalva/jwt-go/v4"
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -74,7 +75,7 @@ func Login(c *fiber.Ctx) error {
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		Issuer:    strconv.Itoa(int(user.Id)),
-		ExpiresAt: jwt.NewNumericDate( time.Now().Add(time.Hour * 24)), // expires in 1 day
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)), // expires in 1 day
 	})
 
 	token, err := claims.SignedString([]byte("secret"))
@@ -82,5 +83,62 @@ func Login(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.JSON(token)
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+type Claims struct {
+	jwt.RegisteredClaims
+	// jwt.StandardClaims
+}
+
+func User(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+
+	if err != nil || !token.Valid{
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	claims := token.Claims.(*Claims)
+
+	var user models.User               
+
+	db.DB.Where("id = ?", claims.Issuer).First(&user)
+
+	return c.JSON(user)
+}
+
+
+func Logout(c *fiber.Ctx) error {
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message":"success",
+	})
+
 }
