@@ -18,7 +18,12 @@ func Setup(app *fiber.App) {
 
 
 	app.Get("/api/v1/users", controllers.AllUsers)
+
+	// CRUD METHODS (CREATE, READ, UPDATE & DELETE)
 	app.Post("/api/v1/users", controllers.CreateUser)
+	app.Get("/api/v1/users/:id", controllers.GetUser)
+	app.Put("/api/v1/users/:id", controllers.UpdateUser)
+	app.Delete("/api/v1/users/:id", controllers.DeleteUser)
 
 
 
