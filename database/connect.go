@@ -2,10 +2,10 @@ package db
 
 import (
 	"fmt"
-	"go-admin/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"go-admin/models"
 )
 
 var DB *gorm.DB
@@ -24,6 +24,6 @@ func Connect() {
 	
 	DB = db
 
-	db.AutoMigrate(&models.User{}, &models.Role{})
+	db.AutoMigrate(&models.User{}, &models.Role{}, &models.Permission{}, &models.Product{}, &models.Order{}, &models.OrderItem{})
 
 }

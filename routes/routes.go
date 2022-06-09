@@ -33,4 +33,24 @@ func Setup(app *fiber.App) {
 	app.Put("/api/v1/roles/:id", controllers.UpdateRole)
 	app.Delete("/api/v1/roles/:id", controllers.DeleteRole)
 
+		// PRODUCTS CRUD METHODS (CREATE, READ, UPDATE & DELETE)
+		app.Get("/api/v1/products", controllers.AllProducts)
+		app.Post("/api/v1/products", controllers.CreateProduct)
+		app.Get("/api/v1/products/:id", controllers.GetProduct)
+		app.Put("/api/v1/products/:id", controllers.UpdateProduct)
+		app.Delete("/api/v1/products/:id", controllers.DeleteProduct)
+	
+
+		app.Post("/api/v1/upload", controllers.Upload)
+		app.Static("/api/v1/upload", "./uploads")
+
+
+		app.Get("/api/v1/orders", controllers.AllOrders)
+
+
+		app.Post("/api/v1/export", controllers.Export)
+
+		app.Get("/api/v1/chart", controllers.Chart)
+
+
 }
