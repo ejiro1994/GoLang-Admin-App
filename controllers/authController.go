@@ -30,6 +30,7 @@ func Register(c *fiber.Ctx) error {
 		FirstName: data["first_name"],
 		LastName:  data["last_name"],
 		Email:     data["email"],
+		RoleId: 1,
 	}
 
 	user.SetPassword(data["password"])
@@ -84,7 +85,8 @@ func Login(c *fiber.Ctx) error {
 	c.Cookie(&cookie)
 
 	return c.JSON(fiber.Map{
-		"message": "success",
+		"message": "Successful Login",
+		"JWT": cookie,
 	})
 }
 

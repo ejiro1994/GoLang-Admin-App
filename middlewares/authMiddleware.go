@@ -11,7 +11,7 @@ func IsAuthenticated(c *fiber.Ctx) error {
 	if _, err := util.ParseJwt(cookie); err != nil {
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
-			"message": "unauthenticated",
+			"message": "Unauthenticated",
 		})
 	}
 

@@ -40,6 +40,7 @@ func Setup(app *fiber.App) {
 		app.Put("/api/v1/products/:id", controllers.UpdateProduct)
 		app.Delete("/api/v1/products/:id", controllers.DeleteProduct)
 	
+		app.Get("/api/v1/permissions", controllers.AllPermissions)
 
 		app.Post("/api/v1/upload", controllers.Upload)
 		app.Static("/api/v1/upload", "./uploads")
